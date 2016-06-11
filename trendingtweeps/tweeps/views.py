@@ -25,7 +25,7 @@ def getInitialUserData(request):
 			json_data = searched_users[user]._json
 			twitter_id = json_data['id']
 			follower_count = json_data['followers_count']
-			location = 'Delhi'
+			location = json_data['location']
 			profile_image_url = json_data['profile_image_url']
 			username = json_data['screen_name']
 			try:
