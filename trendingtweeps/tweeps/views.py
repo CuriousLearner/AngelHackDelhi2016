@@ -1,4 +1,5 @@
 from django.shortcuts import render, HttpResponse
+from django.http import JsonResponse
 import tweepy
 from .models import TwitterUser
 from os import environ
@@ -71,24 +72,66 @@ def social_impact_formula(retweet, favorites, tweets, followers):
 
 
 def calculate_for_single_user(request, username):
-	timeline = api.user_timeline(username)
-	timeline = list(timeline)
-	favorite_count = 0
-	retweet_count = 0
-	for tweet in range(len(timeline)):
-		json_data = timeline[tweet]._json
-		favorite_count += json_data['favorite_count']
-		retweet_count += json_data['retweet_count']
-		follower_count = json_data['user']['followers_count']
-		location = json_data['user']['location']
-		profile_image_url = json_data['user']['profile_image_url']
-		twitter_id = json_data['user']['id']
 	try:
-		t = TwitterUser.objects.get(twitter_id=twitter_id)
+		timeline = api.user_timeline(username)
+	except Exception, e: # API call failed
+		timeline = None
+	if timeline:
+		timeline = list(timeline)
+		favorite_count = 0
+		retweet_count = 0
+		for tweet in range(len(timeline)):
+			json_data = timeline[tweet]._json
+			favorite_count += json_data['favorite_count']
+			retweet_count += json_data['retweet_count']
+			follower_count = json_data['user']['followers_count']
+			location = json_data['user']['location']
+			profile_image_url = json_data['user']['profile_image_url']
+			twitter_id = json_data['user']['id']
+	try:
+		t = TwitterUser.objects.get(twitter_username=username)
 	except:
+		if not timeline:
+			return JsonResponse({"message": "username not found"}, status=400, content_type="application/json")
 		t = TwitterUser.objects.create(twitter_id=twitter_id, total_fav_count=favorite_count, total_retweet_count=retweet_count, follower_count=follower_count, twitter_username=username, profile_image=profile_image_url, location=location)
 	max_impact_val = 161300000
 	social_impact_score = social_impact_formula(t.total_retweet_count, t.total_fav_count, 0, t.follower_count)
 	t.impact_score = ((social_impact_score / max_impact_val) * 10000) % 100
 	t.save()
-	return HttpResponse("Done")
+	return JsonResponse(
+				all_twitter_user_serializer(
+					TwitterUser.objects.all()
+				),
+				safe=False,
+				status=200,
+				content_type="application/json"
+			)
+
+
+def single_twitter_user_serializer(twitter_user):
+	d = {}
+	d['twitter_id'] = twitter_user.twitter_id
+	d['twitter_username'] = twitter_user.twitter_username
+	d['follower_count'] = twitter_user.follower_count
+	d['total_fav_count'] = twitter_user.total_fav_count
+	d['total_retweet_count'] = twitter_user.total_retweet_count
+	d['location'] = twitter_user.location
+	d['impact_score'] = twitter_user.impact_score
+	d['profile_image_url'] = twitter_user.profile_image
+	return d
+
+
+def all_twitter_user_serializer(twitter_users):
+	result = []
+	for user in twitter_users:
+		d = {}
+		d['twitter_id'] = user.twitter_id
+		d['twitter_username'] = user.twitter_username
+		d['follower_count'] = user.follower_count
+		d['total_fav_count'] = user.total_fav_count
+		d['total_retweet_count'] = user.total_retweet_count
+		d['location'] = user.location
+		d['impact_score'] = user.impact_score
+		result.append(d)
+	return result
+
