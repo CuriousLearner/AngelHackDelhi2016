@@ -27,5 +27,45 @@ def getInitialUserData(request):
 			location = 'Delhi'
 			profile_image_url = json_data['profile_image_url']
 			username = json_data['screen_name']
-			TwitterUser.objects.create(twitter_id=twitter_id, follower_count=follower_count, twitter_username=username, profile_image=profile_image_url)
+			try:
+				TwitterUser.objects.create(twitter_id=twitter_id, follower_count=follower_count, twitter_username=username, profile_image=profile_image_url, location=location)
+			except:
+				pass
 	return HttpResponse("All data fetched")
+
+
+def getTweetData(request):
+	allUsers = TwitterUser.objects.all()
+	for user in allUsers:
+		uid = user.twitter_id
+		timeline = api.user_timeline(uid)
+		timeline = list(timeline)
+		favorite_count = 0
+		retweet_count = 0
+		for tweet in range(len(timeline)):
+			json_data = timeline[tweet]._json
+			favorite_count += json_data['favorite_count']
+			retweet_count += json_data['retweet_count']
+		try:
+			t = TwitterUser.objects.get(twitter_id=uid)
+		except:
+			print uid
+		t.total_fav_count = favorite_count
+		t.total_retweet_count = retweet_count
+		t.save()
+	return HttpResponse("Favourites and Retweets calculated!")
+
+
+def calculate_impact_score(request):
+	max_impact_val = 161300000
+	allUsers = TwitterUser.objects.all()
+	for user in allUsers:
+		social_impact_score = social_impact_formula(user.total_retweet_count, user.total_fav_count, 0, user.follower_count)
+		user.impact_score = ((social_impact_score / max_impact_val) * 10000) % 100
+		user.save()
+	return HttpResponse("Social Impact Score calculated")
+
+def social_impact_formula(retweet, favorites, tweets, followers):
+	return retweet * 8.5 + favorites * 5.5 + tweets * 6 + followers * 9.25
+
+
