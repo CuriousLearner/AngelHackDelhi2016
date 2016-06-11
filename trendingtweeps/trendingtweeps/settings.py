@@ -56,7 +56,9 @@ ROOT_URLCONF = 'trendingtweeps.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            './tweeps/static/templates/'
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

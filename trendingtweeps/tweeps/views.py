@@ -152,3 +152,7 @@ def all_twitter_user_serializer(twitter_users):
         result.append(d)
     return result
 
+
+def index(request):
+    return render(request, 'index.html', {})
+
