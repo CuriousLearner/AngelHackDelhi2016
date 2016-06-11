@@ -19,7 +19,7 @@ api = tweepy.API(auth)
 # Create your views here.
 def getInitialUserData(request):
     for i in range(15):
-        searched_users = api.search_users(q="location=Delhi", page=i+1)
+        searched_users = api.search_users(q="location=Delhi", page=i + 1)
         searched_users = list(searched_users)
         for user in range(len(searched_users)):
             json_data = searched_users[user]._json
@@ -29,7 +29,8 @@ def getInitialUserData(request):
             profile_image_url = json_data['profile_image_url']
             username = json_data['screen_name']
             try:
-                TwitterUser.objects.create(twitter_id=twitter_id, follower_count=follower_count, twitter_username=username, profile_image=profile_image_url, location=location)
+                TwitterUser.objects.create(twitter_id=twitter_id, follower_count=follower_count,
+                                           twitter_username=username, profile_image=profile_image_url, location=location)
             except:
                 pass
     return HttpResponse("All data fetched")
@@ -56,6 +57,7 @@ def getTweetData(request):
         t.save()
     return HttpResponse("Favourites and Retweets calculated!")
 
+
 def calculate_rank():
     allUsers = TwitterUser.objects.all().order_by('-impact_score')
     i = 1
@@ -69,8 +71,10 @@ def calculate_impact_score(request):
     max_impact_val = 161300000
     allUsers = TwitterUser.objects.all()
     for user in allUsers:
-        social_impact_score = social_impact_formula(user.total_retweet_count, user.total_fav_count, 0, user.follower_count)
-        user.impact_score = ((social_impact_score / max_impact_val) * 10000) % 100
+        social_impact_score = social_impact_formula(
+            user.total_retweet_count, user.total_fav_count, 0, user.follower_count)
+        user.impact_score = (
+            (social_impact_score / max_impact_val) * 10000) % 100
         user.save()
     calculate_rank()
     return HttpResponse("Social Impact Score calculated")
@@ -83,7 +87,7 @@ def social_impact_formula(retweet, favorites, tweets, followers):
 def calculate_for_single_user(request, username):
     try:
         timeline = api.user_timeline(username)
-    except Exception, e: # API call failed
+    except Exception, e:  # API call failed
         timeline = None
     if timeline:
         timeline = list(timeline)
@@ -103,9 +107,11 @@ def calculate_for_single_user(request, username):
     except:
         if not timeline:
             return JsonResponse({"message": "username not found"}, status=400, content_type="application/json")
-        t = TwitterUser.objects.create(twitter_id=twitter_id, total_fav_count=favorite_count, total_retweet_count=retweet_count, follower_count=follower_count, twitter_username=username, profile_image=profile_image_url, location=location)
+        t = TwitterUser.objects.create(twitter_id=twitter_id, total_fav_count=favorite_count, total_retweet_count=retweet_count,
+                                       follower_count=follower_count, twitter_username=username, profile_image=profile_image_url, location=location)
     max_impact_val = 161300000
-    social_impact_score = social_impact_formula(t.total_retweet_count, t.total_fav_count, 0, t.follower_count)
+    social_impact_score = social_impact_formula(
+        t.total_retweet_count, t.total_fav_count, 0, t.follower_count)
     t.impact_score = ((social_impact_score / max_impact_val) * 10000) % 100
     t.save()
     calculate_rank()
@@ -114,13 +120,13 @@ def calculate_for_single_user(request, username):
 
 def return_json_data():
     return JsonResponse(
-                all_twitter_user_serializer(
-                    TwitterUser.objects.all()
-                ),
-                safe=False,
-                status=200,
-                content_type="application/json"
-            )
+        all_twitter_user_serializer(
+            TwitterUser.objects.all()
+        ),
+        safe=False,
+        status=200,
+        content_type="application/json"
+    )
 
 
 def single_twitter_user_serializer(twitter_user):
@@ -155,4 +161,3 @@ def all_twitter_user_serializer(twitter_users):
 
 def index(request):
     return render(request, 'index.html', {})
-
