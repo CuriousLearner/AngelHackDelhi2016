@@ -1,10 +1,45 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 	<title>Trending Tweeps</title>
+	<!-- Custom Stylesheet -->
+	<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="../static/css/style.css">
-	<script type="text/javascript" src="../static/js/script.js"></script>
+	<script id="card-template" type="text/html">
+		<section class="profile">
+			<div id="iCard">
+				<div class="user">
+					<img src="https://igcdn-photos-c-a.akamaihd.net/hphotos-ak-xpl1/t51.2885-19/11324445_125573931120354_566998026_a.jpg">
+				</div>
+				<div class="details">
+					<h1 id="userhandle"></h1>
+					<h2 id="location"><h2>
+					<h2 id="impactScore"></h2>
+				</div>
+				<div class="count">
+					<ul>
+						<li class="favorites"><span>Favorites</span></li>
+						<li class="rts"><span>Retweets</span></li>
+						<li class="followers"><span>Followers</span></li>
+					</ul>
+				</div>
+			</div>
+		</section>
+	</script>
 </head>
 <body>
-	<h1>Welcome to Trending Tweeps</h1>
+	<h1 class="heading">Trending Tweeps</h1>
+	<div class="form-wrapper cf">
+		<input id="handle" type="text" placeholder="Twitter handle">
+		<button id="handleSubmit">Search</button>
+	</div>
+	<div class="dynamic">
+	</div>
+	<script type="text/javascript" src="../static/js/jquery.min.js"></script>
+	<script type="text/javascript" src="../static/js/script.js"></script>
 </body>
 </html>
