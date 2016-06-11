@@ -12,3 +12,4 @@ class TwitterUser(models.Model):
 	total_retweet_count = models.PositiveIntegerField(null=True)
 	location = models.CharField(max_length=30)
 	impact_score = models.FloatField(null=True)
+	rank = models.PositiveIntegerField(default=0)

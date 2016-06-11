@@ -64,6 +64,12 @@ def calculate_impact_score(request):
 		social_impact_score = social_impact_formula(user.total_retweet_count, user.total_fav_count, 0, user.follower_count)
 		user.impact_score = ((social_impact_score / max_impact_val) * 10000) % 100
 		user.save()
+	allUsers = TwitterUser.objects.all().order_by('impact_score')
+	i = 1
+	for user in allUsers:
+		user.rank = i
+		user.save()
+		i += 1
 	return HttpResponse("Social Impact Score calculated")
 
 
@@ -118,6 +124,7 @@ def single_twitter_user_serializer(twitter_user):
 	d['location'] = twitter_user.location
 	d['impact_score'] = twitter_user.impact_score
 	d['profile_image_url'] = twitter_user.profile_image
+	d['rank'] = twitter_user.rank
 	return d
 
 
@@ -132,6 +139,7 @@ def all_twitter_user_serializer(twitter_users):
 		d['total_retweet_count'] = user.total_retweet_count
 		d['location'] = user.location
 		d['impact_score'] = user.impact_score
+		d['rank'] = user.rank
 		result.append(d)
 	return result
 
