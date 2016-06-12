@@ -196,8 +196,35 @@ h1 {
     font-weight: bold;
     padding-left: 63px;
 }
+#impactScore{
+  font-weight: bold;
+  padding:1em;
+  color:#409F4D;
+}
 .count ul li span {
     display: block;
     color: #8a8a8a;
     font-size: 16px;
+}
+.back{
+  position: absolute;
+  left: 0px;
+  top:0px;
+  width: 100px;
+  height: 100px;
+  background-image: url('../img/back-button.png');
+  background-size: contain;
+  border-bottom-right-radius: 100px;
+  cursor: pointer;
+  z-index: 19;
+}
+.visual-up{
+  position: absolute;
+  bottom: 0px;
+  margin:0 auto;
+}
+.visual-up,.visual-down{
+  cursor: pointer;
+  z-index: 19;
+  font-size:6em;
 }
