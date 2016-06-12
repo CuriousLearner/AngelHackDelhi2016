@@ -19,7 +19,7 @@ api = tweepy.API(auth)
 # Create your views here.
 def getInitialUserData(request):
     for i in range(15):
-        searched_users = api.search_users(q="location=Delhi", page=i + 1)
+        searched_users = api.search_users(q="India", page=i + 1, geocode="28.6139,77.2090,50km")
         searched_users = list(searched_users)
         for user in range(len(searched_users)):
             json_data = searched_users[user]._json
@@ -40,21 +40,25 @@ def getTweetData(request):
     allUsers = TwitterUser.objects.all()
     for user in allUsers:
         uid = user.twitter_id
-        timeline = api.user_timeline(uid)
-        timeline = list(timeline)
-        favorite_count = 0
-        retweet_count = 0
-        for tweet in range(len(timeline)):
-            json_data = timeline[tweet]._json
-            favorite_count += json_data['favorite_count']
-            retweet_count += json_data['retweet_count']
-        try:
-            t = TwitterUser.objects.get(twitter_id=uid)
-        except:
-            print uid
-        t.total_fav_count = favorite_count
-        t.total_retweet_count = retweet_count
-        t.save()
+        if not user.total_fav_count or not user.total_retweet_count:
+            try:
+                timeline = api.user_timeline(uid)
+                timeline = list(timeline)
+                favorite_count = 0
+                retweet_count = 0
+                for tweet in range(len(timeline)):
+                    json_data = timeline[tweet]._json
+                    favorite_count += json_data['favorite_count']
+                    retweet_count += json_data['retweet_count']
+                try:
+                    t = TwitterUser.objects.get(twitter_id=uid)
+                except:
+                    print uid
+                t.total_fav_count = favorite_count
+                t.total_retweet_count = retweet_count
+                t.save()
+            except:
+                return HttpResponse("Rate Limit exceeded! Wait 15 mins")
     return HttpResponse("Favourites and Retweets calculated!")
 
 
@@ -71,11 +75,16 @@ def calculate_impact_score(request):
     max_impact_val = 161300000
     allUsers = TwitterUser.objects.all()
     for user in allUsers:
-        social_impact_score = social_impact_formula(
-            user.total_retweet_count, user.total_fav_count, 0, user.follower_count)
-        user.impact_score = (
-            (social_impact_score / max_impact_val) * 10000) % 100
-        user.save()
+        if user.total_retweet_count and user.total_fav_count:
+            social_impact_score = social_impact_formula(
+                        user.total_retweet_count,
+                        user.total_fav_count,
+                        0,
+                        user.follower_count)
+            user.impact_score = (
+                        (social_impact_score / max_impact_val) * 10000
+                        ) % 100
+            user.save()
     calculate_rank()
     return HttpResponse("Social Impact Score calculated")
 
@@ -104,6 +113,7 @@ def calculate_for_single_user(request, username):
     try:
         t = TwitterUser.objects.get(twitter_username=username)
         return return_json_data()
+        print "done"
     except:
         if not timeline:
             return JsonResponse({"message": "username not found"}, status=400, content_type="application/json")
@@ -154,6 +164,7 @@ def all_twitter_user_serializer(twitter_users):
         d['total_retweet_count'] = user.total_retweet_count
         d['location'] = user.location
         d['impact_score'] = user.impact_score
+        d['profile_image_url'] = user.profile_image
         d['rank'] = user.rank
         result.append(d)
     return result

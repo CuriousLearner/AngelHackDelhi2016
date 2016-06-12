@@ -218,11 +218,6 @@ h1 {
   cursor: pointer;
   z-index: 19;
 }
-.visual-up{
-  position: absolute;
-  bottom: 0px;
-  margin:0 auto;
-}
 .visual-up,.visual-down{
   cursor: pointer;
   z-index: 19;
