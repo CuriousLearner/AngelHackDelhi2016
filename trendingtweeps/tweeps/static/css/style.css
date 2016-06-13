@@ -223,3 +223,11 @@ h1 {
   z-index: 19;
   font-size:6em;
 }
+.error{
+    color:red;
+}
+.loadingGif{
+    background: url('../img/ajax-loader.gif') no-repeat !important;
+    background-size:40% !important;
+    background-position: 50% 50% !important;
+}

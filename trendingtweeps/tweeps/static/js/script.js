@@ -191,48 +191,51 @@ $(document).ready(function() {
     $('.back').hide();
     $('.dynamic').hide();
     $('.visual-up').hide();
-    $('.heading').show();
+    $('.heading').fadeIn('slow');
+    $('.error').empty();
     $(document.body).on('click', '.back',
         function() {
             $('.visual').hide();
             $('.back').hide();
             $('.dynamic').hide();
-            $('.form-wrapper').show();
+            $('.heading').fadeIn('slow');
+            $('.form-wrapper').fadeIn('slow');
             $('.visual-down').hide();
             $('.visual-up').hide();
-            $('.heading').show();
+            $('.error').empty();
         });
     $(document).keyup(function(e) {
         if (e.keyCode == 27) { // escape key maps to keycode `27`
             $('.visual').hide();
             $('.back').hide();
             $('.dynamic').hide();
-            $('.form-wrapper').show();
+            $('.heading').fadeIn('slow');
+            $('.form-wrapper').fadeIn('slow');
             $('.visual-down').hide();
             $('.visual-up').hide();
             $('#handle').val('');
-            $('.heading').show();
+            $('.error').empty();
         }
     });
     $(document.body).on('click', '.visual-down',
         function() {
-            $('.visual').show();
-            $('.back').show();
+            $('.visual').slideDown('slow');
+            $('.back').slideDown('slow');
+            $('.visual-up').slideDown('slow');
             $('.dynamic').hide();
             $('.form-wrapper').hide();
             $('.visual-down').hide();
-            $('.visual-up').show();
             $('.heading').hide();
         });
     $(document).keyup(function(e) {
         if (e.keyCode == 40) { // down key maps to keycode `40`
-            $('.visual').show();
-            $('.back').show();
+            $('.visual').slideDown('slow');
+            $('.visual-up').slideDown('slow');
+            $('.heading').slideDown('slow');
+            $('.back').slideDown('slow');
             $('.dynamic').hide();
             $('.form-wrapper').hide();
             $('.visual-down').hide();
-            $('.visual-up').show();
-            $('.heading').show();
         }
     });
     $(document.body).on('click', '.visual-up',
@@ -240,20 +243,20 @@ $(document).ready(function() {
             $('.visual').hide();
             $('.back').show();
             $('.dynamic').show();
-            $('.form-wrapper').hide();
-            $('.visual-down').show();
-            $('.visual-up').hide();
             $('.heading').show();
+            $('.visual-down').show();
+            $('.form-wrapper').hide();
+            $('.visual-up').hide();
         });
     $(document).keyup(function(e) {
         if (e.keyCode == 38) { // up key maps to keycode `38`
             $('.visual').hide();
             $('.back').show();
             $('.dynamic').show();
-            $('.form-wrapper').hide();
             $('.visual-down').show();
-            $('.visual-up').hide();
             $('.heading').show();
+            $('.form-wrapper').hide();
+            $('.visual-up').hide();
         }
     });
     $('#handle').keypress(function(e) {
@@ -264,6 +267,8 @@ $(document).ready(function() {
             $(this).val('');
             requestData(text);
             // handleSearch(message, text);
+            $('.error').empty();
+            $('#handleSubmit').addClass('loadingGif');
         }
     });
     $('#handleSubmit').click(function() {
@@ -271,6 +276,8 @@ $(document).ready(function() {
         $('#handle').val('');
         requestData(text);
         // handleSearch(message, text);
+        $('.error').empty();
+        $('#handleSubmit').addClass('loadingGif');
     });
 
     function requestData(handlename) {
@@ -281,16 +288,18 @@ $(document).ready(function() {
         });
         request.done(function(msg) {
             if (msg.length == 0) {
-                alert('Nothing here');
-                $('<h2 class="text-center">Houston, we have nothing here.<b>Stay tuned.</b></h2>').insertAfter('.form-wrapper');
+                $('<h2 class="red text-center">User not found</h2>').appendTo('.error');
+                $('#handleSubmit').removeClass('loadingGif');
             } else {
                 message=msg;
+                $('.error').empty();
                 handleSearch(msg,handlename);
+                $('#handleSubmit').removeClass('loadingGif');
             }
         });
     
         request.fail(function(jqXHR, textStatus) {
-            $('<h2 class="text-center">Houston, our server has faced some unexpected error.<b>Stay tuned.</b></h2>').insertAfter('.form-wrapper');
+            $('<h2 class="red text-center">User not found</h2>').appendTo('.error');
             console.log("Request failed: " + textStatus);
             $('#handleSubmit').removeClass('loadingGif');
         });
