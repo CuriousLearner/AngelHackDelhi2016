@@ -227,17 +227,6 @@ $(document).ready(function() {
             $('.visual-down').hide();
             $('.heading').hide();
         });
-    $(document).keyup(function(e) {
-        if (e.keyCode == 40) { // down key maps to keycode `40`
-            $('.visual').slideDown('slow');
-            $('.visual-up').slideDown('slow');
-            $('.heading').slideDown('slow');
-            $('.back').slideDown('slow');
-            $('.dynamic').hide();
-            $('.form-wrapper').hide();
-            $('.visual-down').hide();
-        }
-    });
     $(document.body).on('click', '.visual-up',
         function() {
             $('.visual').hide();
@@ -248,17 +237,6 @@ $(document).ready(function() {
             $('.form-wrapper').hide();
             $('.visual-up').hide();
         });
-    $(document).keyup(function(e) {
-        if (e.keyCode == 38) { // up key maps to keycode `38`
-            $('.visual').hide();
-            $('.back').show();
-            $('.dynamic').show();
-            $('.visual-down').show();
-            $('.heading').show();
-            $('.form-wrapper').hide();
-            $('.visual-up').hide();
-        }
-    });
     $('#handle').keypress(function(e) {
         var key = e.which;
         if (key == 13) // the enter key code
