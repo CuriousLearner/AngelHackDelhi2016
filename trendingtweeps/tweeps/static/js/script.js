@@ -263,21 +263,29 @@ $(document).ready(function() {
         var key = e.which;
         if (key == 13) // the enter key code
         {
-            var text = $(this).val();
+            var text = $(this).val().trim().toLowerCase();
             $(this).val('');
-            requestData(text);
-            // handleSearch(message, text);
-            $('.error').empty();
-            $('#handleSubmit').addClass('loadingGif');
+            if(text!=''){
+              requestData(text);
+              $('.error').empty();
+              $('#handleSubmit').addClass('loadingGif');
+            }else{
+              $('.error').empty();
+              $('<h2 class="red text-center">Please enter a username</h2>').appendTo('.error');
+            }
         }
     });
     $('#handleSubmit').click(function() {
-        var text = $('#handle').val();
+        var text = $('#handle').val().trim().toLowerCase();
         $('#handle').val('');
-        requestData(text);
-        // handleSearch(message, text);
-        $('.error').empty();
-        $('#handleSubmit').addClass('loadingGif');
+        if(text!=''){
+          requestData(text);
+          $('.error').empty();
+          $('#handleSubmit').addClass('loadingGif');
+        }else{
+          $('.error').empty();
+          $('<h2 class="red text-center">Please enter a username</h2>').appendTo('.error');
+        }
     });
 
     function requestData(handlename) {
@@ -297,7 +305,6 @@ $(document).ready(function() {
                 $('#handleSubmit').removeClass('loadingGif');
             }
         });
-    
         request.fail(function(jqXHR, textStatus) {
             $('<h2 class="red text-center">User not found</h2>').appendTo('.error');
             console.log("Request failed: " + textStatus);
