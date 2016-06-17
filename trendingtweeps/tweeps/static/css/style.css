@@ -10,7 +10,11 @@ a {
 .heading {
     font: 5em 'Source Sans Pro', sans-serif;
 }
-
+@media (max-height: 570px){
+  .heading-hide{
+    display:none !important;
+  }
+}
 /*-------------------------------------*/
 
 .cf:before, .cf:after {
@@ -120,11 +124,26 @@ a {
     border: 0;
     padding: 0;
 }
+@media (max-width: 550px){
+  .form-wrapper{
+    width: 300px;
+    min-width: 300px;
+  }
+  .form-wrapper input{
+    width:180px;
+  }
+}
 .profile {
     /* IE6-9 */
     font-family: 'Lato', sans-serif;
     height: 100%;
     width: 100%;
+}
+.userrank{
+  color: #F5F8FA;
+  background: #43A047;
+  border-radius: 10%;
+  font-size: 36px;
 }
 h1 {
     text-align: center;
@@ -146,11 +165,6 @@ h1 {
     padding: 0px;
     margin: 0px;
 }
-.details {
-    margin: 0 auto;
-    width: 220px;
-    font-weight: bold;
-}
 .details h1 {
     color: #4b4946;
     margin: 0px;
@@ -168,38 +182,44 @@ h1 {
     color: #8a8a8a;
     text-decoration: none;
 }
-.user {
-    margin: 0 auto;
-    width: 150px;
-    padding-top: 20px;
-    font-weight: bold;
+@media (min-width: 992px){
+  .user {
+      margin: 0 auto;
+      width: 150px;
+      padding-top: 20px;
+      font-weight: bold;
+      float:none;
+  }
+  .details {
+      margin: 0 auto;
+      width: 420px;
+      font-weight: bold;
+      float:none;
+  }
 }
 .user img {
     border-radius: 50%;
+    height:10em;
 }
 .count {
-    width: 450px;
-    color: black;
+  color: black;
     font-size: 20px;
-    margin: 0 auto;
-    padding-bottom: 20px;
+  padding-bottom: 20px;
     text-align: center;
 }
 .count ul {
     padding: 0px;
     margin: 0px;
-    margin-left: -42px;
 }
 .count ul li {
     list-style: none;
     display: inline-block;
     font-weight: bold;
-    padding-left: 63px;
 }
 #impactScore{
   font-weight: bold;
-  padding:1em;
-  color:#409F4D;
+  padding:0.5em 0;
+  color:#02779E;
 }
 .count ul li span {
     display: block;
@@ -223,6 +243,24 @@ h1 {
   z-index: 19;
   font-size:6em;
 }
+.visual{
+  overflow-x: hidden;
+}
+#down{
+  font-family: 'Glyphicons Halflings';
+  font-weight: 400;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-style: normal;
+  position: absolute;
+  bottom: 0.1em !important;
+}
+@media (max-height: 570px){
+  #down{
+    position: relative !important;
+  }
+}
 .error{
     color:red;
 }
@@ -230,4 +268,8 @@ h1 {
     background: url('../img/ajax-loader.gif') no-repeat !important;
     background-size:40% !important;
     background-position: 50% 50% !important;
+}
+.overtakebootstrap{
+  padding-left: 0 !important;
+  padding-right: 0 !important;
 }

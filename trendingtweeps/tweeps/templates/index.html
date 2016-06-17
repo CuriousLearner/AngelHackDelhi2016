@@ -16,23 +16,26 @@
 			.liquidFillGaugeText { font-family: Helvetica; font-weight: bold; }
 	</style>
 	<script id="card-template" type="text/html">
-		<section class="profile">
-			<div id="iCard">
-				<div class="user">
-					<img src="">
-				</div>
-				<div class="details">
-					<h1 id="userhandle"></h1>
-					<h2 id="location"><h2>
-					<h1>Social impact</h1>
-					<h1 id="impactScore"></h1>
-				</div>
-				<div class="count">
-					<ul>
-						<li class="favorites"><span>Favorites</span></li>
-						<li class="rts"><span>Retweets</span></li>
-						<li class="followers"><span>Followers</span></li>
-					</ul>
+		<section class="profile row">
+			<div class="col-lg-6 col-lg-offset-3">
+				<div id="iCard" class="row">
+					<div class="user col-xs-10 col-sm-12">
+						<img src="">
+					</div>
+					<div class="details col-lg-12 col-xs-10 col-sm-12">
+						<h1 class="col-lg-12" id="userhandle"></h1>
+						<span class="userrank"></span>
+						<h2 class="col-lg-12" id="location"></h2>
+						<h1 class="col-lg-12">Social impact</h1>
+						<h1 class="col-lg-12" id="impactScore"></h1>
+					</div>
+					<div class="count col-lg-12 col-xs-10 col-sm-12">
+						<ul>
+							<li class="col-lg-3 favorites"><span>Favorites</span></li>
+							<li class="col-lg-3 rts"><span>Retweets</span></li>
+							<li class="col-lg-3 followers"><span>Followers</span></li>
+						</ul>
+					</div>
 				</div>
 			</div>
 		</section>
@@ -50,32 +53,32 @@
 	</div>
 	<div class="visual">
 		<div class="row">
-		<div class="col-sm-12 col-md-5 col-lg-5">
+		<div class="overtakebootstrap col-xs-12 col-sm-12 col-md-6 col-lg-6">
 		<h1 style="text-align:center">IMPACT SCORE</h1>
 		<h4 style="text-align:center" id="score_title">YOUR SCORE</h4>
 		<svg id="fillgauge1" width="97%" height="250" onclick="gauge1.update(NewValueImpactScore());"></svg>
 		</div>
-		<div class="col-sm-12 col-md-6 col-lg-6">
+		<div class="overtakebootstrap col-xs-12 col-sm-12 col-md-6 col-lg-6">
 		<h1 style="text-align:center" >RETWEET COUNTS</h1>
 		<h4 style="text-align:center" id="retweet_title">YOUR RETWEET COUNTS</h4>
 		<svg id="fillgauge2" width="97%" height="250" onclick="gauge2.update(NewValueRetweet());"></svg>
 		</div>
 		</div>
 		<div class="row">
-		<div class="col-sm-12 col-md-5 col-lg-5">
+		<div class="overtakebootstrap col-xs-12 col-sm-12 col-md-6 col-lg-6">
 
 		<h1 style="text-align:center">TOTAL FAVORITES</h1>
 		<h4 style="text-align:center" id="favorites_title">YOUR TOTAL FAVORITES</h4>
 		<svg id="fillgauge3" width="97%" height="250" onclick="gauge3.update(NewValueFavorite());"></svg>
 		</div>
-		<div class="col-sm-12 col-md-6 col-lg-6">
+		<div class="overtakebootstrap col-xs-12 col-sm-12 col-md-6 col-lg-6">
 		<h1 style="text-align:center">FOLLOWER COUNTS</h1>
 		<h4 style="text-align:center" id="follower_title">YOUR FOLLOWER</h4>
 		<svg id="fillgauge4" width="97%" height="250" onclick="gauge4.update(NewValueFollower());"></svg>
 		</div>
 		</div>
 	</div>
-	<span class="glyphicon glyphicon-chevron-down visual-down" aria-hidden="true"></span>
+	<span id="down" class="gylph navbar-fixed-bottom glyphicon-chevron-down visual-down" aria-hidden="true"></span>
 	<span class="glyphicon glyphicon-chevron-up visual-up" aria-hidden="true"></span>
 	<script type="text/javascript" src="../static/js/jquery.min.js"></script>
 	<script type="text/javascript" src="../static/js/script.js"></script>

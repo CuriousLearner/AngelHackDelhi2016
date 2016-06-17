@@ -203,6 +203,7 @@ $(document).ready(function() {
             $('.visual-down').hide();
             $('.visual-up').hide();
             $('.error').empty();
+            $('.heading').removeClass('heading-hide');
         });
     $(document).keyup(function(e) {
         if (e.keyCode == 27) { // escape key maps to keycode `27`
@@ -215,6 +216,7 @@ $(document).ready(function() {
             $('.visual-up').hide();
             $('#handle').val('');
             $('.error').empty();
+            $('.heading').removeClass('heading-hide');
         }
     });
     $(document.body).on('click', '.visual-down',
@@ -295,17 +297,21 @@ $(document).ready(function() {
         $('.form-wrapper').hide();
         $('.visual-up').hide();
         $.each(msg, function(i, e) {
+            var totallength=msg.length;
             if (msg[i].twitter_username == handlename) {
+                var profileimage=msg[i].profile_image_url.replace('_normal','');
                 var adddata = cardTemplate.replace('userhandle">', 'userhandle">' + msg[i].twitter_username);
                 adddata = adddata.replace('location">', 'location">' + msg[i].location);
+                adddata = adddata.replace('userrank">','userrank">'+msg[i].rank+'/'+totallength);
                 adddata = adddata.replace('impactScore">', 'impactScore">' + parseFloat(msg[i].impact_score).toFixed(4));
                 adddata = adddata.replace('favorites">', 'favorites">' + msg[i].total_fav_count);
                 adddata = adddata.replace('rts">', 'rts">' + msg[i].total_retweet_count);
                 adddata = adddata.replace('followers">', 'followers">' + msg[i].follower_count);
-                adddata = adddata.replace('src="','src="'+msg[i].profile_image_url);
+                adddata = adddata.replace('src="','src="'+profileimage);
                 $(adddata).appendTo('.dynamic');
                 $('.back').show();
                 $('.visual-down').show();
+                $('.heading').addClass('heading-hide');
             }
         });
     }
