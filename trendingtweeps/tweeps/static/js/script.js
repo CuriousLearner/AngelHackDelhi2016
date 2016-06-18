@@ -1,45 +1,63 @@
+var visualTemplate=$('#visual-template').html();
 var message = [];
 var k_score = 0;
 var k_retweet = 0;
 var k_favorites = 0;
 var k_follower = 0;
-var config0 = liquidFillGaugeDefaultSettings();
-config0.textVertPosition = 0.8;
-config0.waveAnimateTime = 5000;
-config0.waveHeight = 0.15;
-config0.waveOffset = 0.25;
-config0.valueCountUp = false;
-config0.displayPercent = false;
-config0.waveAnimateTime = 1000;
-var gauge1 = loadLiquidFillGauge("fillgauge1", 0.1474, config0);
-var config1 = liquidFillGaugeDefaultSettings();
-config1.textVertPosition = 0.8;
-config1.waveAnimateTime = 5000;
-config1.waveHeight = 0.15;
-config1.waveOffset = 0.25;
-config1.valueCountUp = false;
-config1.displayPercent = false;
-config1.waveAnimateTime = 1000;
-var gauge2 = loadLiquidFillGauge("fillgauge2", 5, config1);
-var config2 = liquidFillGaugeDefaultSettings();
-config2.textVertPosition = 0.8;
-config2.waveAnimateTime = 5000;
-config2.waveHeight = 0.15;
-config2.waveOffset = 0.25;
-config2.valueCountUp = false;
-config2.displayPercent = false;
-config2.waveAnimateTime = 1000;
-var gauge3 = loadLiquidFillGauge("fillgauge3", 6, config2);
-var config3 = liquidFillGaugeDefaultSettings();
-config3.textVertPosition = 0.8;
-config3.waveAnimateTime = 5000;
-config3.waveHeight = 0.15;
-config3.waveOffset = 0.25;
-config3.valueCountUp = false;
-config3.displayPercent = false;
-config3.waveAnimateTime = 1000;
-var gauge4 = loadLiquidFillGauge("fillgauge4", 249, config3);
-
+var myImpact;
+var myRT;
+var myFav;
+var myFollow;
+var config0;
+var config1;
+var config2;
+var config3;
+var gauge1;
+var gauge2;
+var gauge3;
+var gauge4;
+function D3init(myImpact,myRT,myFav,myFollow){
+config0 = liquidFillGaugeDefaultSettings();
+  config0.textVertPosition = 0.8;
+  config0.waveAnimateTime = 5000;
+  config0.waveHeight = 0.15;
+  config0.waveOffset = 0.25;
+  config0.valueCountUp = false;
+  config0.displayPercent = false;
+  config0.waveAnimateTime = 1000;
+  config0.maxValue=100;
+gauge1 = loadLiquidFillGauge("fillgauge1", myImpact, config0);
+config1 = liquidFillGaugeDefaultSettings();
+  config1.textVertPosition = 0.8;
+  config1.waveAnimateTime = 5000;
+  config1.waveHeight = 0.15;
+  config1.waveOffset = 0.25;
+  config1.valueCountUp = false;
+  config1.displayPercent = false;
+  config1.waveAnimateTime = 1000;
+  config1.maxValue=10000;
+gauge2 = loadLiquidFillGauge("fillgauge2", myRT, config1);
+config2 = liquidFillGaugeDefaultSettings();
+  config2.textVertPosition = 0.8;
+  config2.waveAnimateTime = 5000;
+  config2.waveHeight = 0.15;
+  config2.waveOffset = 0.25;
+  config2.valueCountUp = false;
+  config2.displayPercent = false;
+  config2.waveAnimateTime = 1000;
+  config2.maxValue=1000;
+gauge3 = loadLiquidFillGauge("fillgauge3", myFav, config2);
+config3 = liquidFillGaugeDefaultSettings();
+  config3.textVertPosition = 0.8;
+  config3.waveAnimateTime = 5000;
+  config3.waveHeight = 0.15;
+  config3.waveOffset = 0.25;
+  config3.valueCountUp = false;
+  config3.displayPercent = false;
+  config3.waveAnimateTime = 1000;
+  config3.maxValue=1000;
+gauge4 = loadLiquidFillGauge("fillgauge4", myFollow, config3);
+}
 function NewValueImpactScore() {
 
     var max_impact_score = 100;
@@ -57,20 +75,22 @@ function NewValueImpactScore() {
       total_impact_score = total_impact_score + message[i].impact_score;
     });
     var avg_impact_score = total_impact_score / message.length;
-    console.log(max_impact_score)
     if (k_score == 0) {
         k_score++;
-        document.getElementById("score_title").innerHTML = "MAXIMUM SCORE"
-        return max_impact_score;
+        document.getElementById("score_title").innerHTML = "Minimum Score"
+        return min_impact_score;
     } else if (k_score == 1) {
         k_score++;
-        document.getElementById("score_title").innerHTML = "MINIMUM SCORE"
-        console.log('minimum')
-        return min_impact_score;
+        document.getElementById("score_title").innerHTML = "Maximum Score"
+        return max_impact_score;
     } else if (k_score == 2) {
-        k_score = 0;
-        document.getElementById("score_title").innerHTML = "AVERAGE SCORE"
+        k_score++;
+        document.getElementById("score_title").innerHTML = "Average Score"
         return avg_impact_score;
+    } else if(k_score == 3){
+        k_score=0;
+        document.getElementById("score_title").innerHTML = "Your Score"
+        return myImpact;
     }
 
 }
@@ -92,20 +112,22 @@ function NewValueRetweet() {
       total_retweet = total_retweet + message[i].total_retweet_count;
     });
     var avg_retweet = total_retweet / message.length;
-    console.log(max_retweet)
     if (k_retweet == 0) {
-        document.getElementById("retweet_title").innerHTML = "MAXIMUM RETWEET"
         k_retweet++;
-        return max_retweet;
+        document.getElementById("retweet_title").innerHTML = "Minimum Retweets"
+        return min_retweet;
     } else if (k_retweet == 1) {
         k_retweet++;
-        document.getElementById("retweet_title").innerHTML = "MINIMUM RETWEET"
-        console.log('minimum')
-        return min_retweet;
+        document.getElementById("retweet_title").innerHTML = "Maximum Retweets"
+        return max_retweet;
     } else if (k_retweet == 2) {
-        k_retweet = 0;
-        document.getElementById("retweet_title").innerHTML = "AVERAGE RETWEET"
+        k_retweet++;
+        document.getElementById("retweet_title").innerHTML = "Average Retweets"
         return Math.round(avg_retweet);
+    } else if(k_retweet == 3){
+        k_retweet=0;
+        document.getElementById("retweet_title").innerHTML = "Your Retweets"
+        return myRT;
     }
 
 }
@@ -129,21 +151,22 @@ function NewValueFavorite() {
       total_favorites = total_favorites + message[i].total_fav_count;
     });
     var avg_favorites = total_favorites / message.length;
-    console.log(avg_favorites)
     if (k_favorites == 0) {
-
         k_favorites++;
-        document.getElementById("favorites_title").innerHTML = "MAXIMUM FAVORITES"
-        return max_favorites;
+        document.getElementById("favorites_title").innerHTML = "Minimum Favorites"
+        return min_favorites;
     } else if (k_favorites == 1) {
         k_favorites++;
-        document.getElementById("favorites_title").innerHTML = "MINIMUM FAVORITES"
-        console.log('minimum')
-        return min_favorites;
+        document.getElementById("favorites_title").innerHTML = "Maximum Favorites"
+        return max_favorites;
     } else if (k_favorites == 2) {
-        k_favorites = 0;
-        document.getElementById("favorites_title").innerHTML = "AVERAGE FAVORITES"
+        k_favorites++;
+        document.getElementById("favorites_title").innerHTML = "Average Favorites"
         return Math.round(avg_favorites);
+    } else if(k_favorites == 3){
+        k_favorites=0;
+        document.getElementById("favorites_title").innerHTML = "Your Favorites"
+        return myFav;
     }
 
 }
@@ -165,20 +188,22 @@ function NewValueFollower() {
       total_follower = total_follower + message[i].follower_count;
     });
     var avg_follower = total_follower / message.length;
-    console.log(avg_follower)
     if (k_follower == 0) {
         k_follower++;
-        document.getElementById("follower_title").innerHTML = "MAXIMUM FOLLOWER"
-        return max_follower;
+        document.getElementById("follower_title").innerHTML = "Minimum Followers"
+        return min_follower;
     } else if (k_follower == 1) {
         k_follower++;
-        document.getElementById("follower_title").innerHTML = "MINIMUM FOLLOWER"
-        console.log('minimum')
-        return min_follower;
+        document.getElementById("follower_title").innerHTML = "Maximum Followers"
+        return max_follower;
     } else if (k_follower == 2) {
-        document.getElementById("follower_title").innerHTML = "AVERAGE FOLLOWER"
-        k_follower = 0;
+        k_follower++;
+        document.getElementById("follower_title").innerHTML = "Average Followers"
         return Math.round(avg_follower);
+    } else if(k_follower == 3){
+        k_follower=0;
+        document.getElementById("follower_title").innerHTML = "Your Followers"
+        return myFollow;
     }
 
 }
@@ -292,13 +317,22 @@ $(document).ready(function() {
         });
     }
     function handleSearch(msg, handlename) {
+        k_score = 0;
+        k_retweet = 0;
+        k_favorites = 0;
+        k_follower = 0;
         $('.dynamic').empty();
+        $('.visual').empty();
         $('.dynamic').show();
         $('.form-wrapper').hide();
         $('.visual-up').hide();
         $.each(msg, function(i, e) {
             var totallength=msg.length;
             if (msg[i].twitter_username == handlename) {
+                myImpact=parseFloat(msg[i].impact_score).toFixed(4);
+                myRT=msg[i].total_retweet_count;
+                myFav=msg[i].total_fav_count;
+                myFollow=msg[i].follower_count;
                 var profileimage=msg[i].profile_image_url.replace('_normal','');
                 var adddata = cardTemplate.replace('userhandle">', 'userhandle">' + msg[i].twitter_username);
                 adddata = adddata.replace('location">', 'location">' + msg[i].location);
@@ -312,6 +346,8 @@ $(document).ready(function() {
                 $('.back').show();
                 $('.visual-down').show();
                 $('.heading').addClass('heading-hide');
+                $(visualTemplate).appendTo('.visual');
+                D3init(myImpact,myRT,myFav,myFollow);
             }
         });
     }

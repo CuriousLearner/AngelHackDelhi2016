@@ -34,9 +34,9 @@ function loadLiquidFillGauge(elementId, value, config) {
     if(config == null) config = liquidFillGaugeDefaultSettings();
 
     var gauge = d3.select("#" + elementId);
-    var radius = Math.min(parseInt(gauge.style("width")), parseInt(gauge.style("height")))/2;
-    var locationX = parseInt(gauge.style("width"))/2 - radius;
-    var locationY = parseInt(gauge.style("height"))/2 - radius;
+    var radius = Math.min(parseInt(gauge.style("width")), parseInt(gauge.style("height")))*1.25;
+    var locationX = parseInt(gauge.style("width"))*1.25 - radius;
+    var locationY = parseInt(gauge.style("height"))*1.50 - radius;
     var fillPercent = Math.max(config.minValue, Math.min(config.maxValue, value))/config.maxValue;
 
     var waveHeightScale;
@@ -105,7 +105,7 @@ function loadLiquidFillGauge(elementId, value, config) {
 
     // Center the gauge within the parent SVG.
     var gaugeGroup = gauge.append("g")
-        .attr('transform','translate('+locationX+','+locationY+')');
+        .attr('transform','translate('+locationY+','+locationX+')');
 
     // Draw the outer circle.
     var gaugeCircleArc = d3.svg.arc()
