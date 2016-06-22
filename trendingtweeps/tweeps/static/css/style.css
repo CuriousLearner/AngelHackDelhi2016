@@ -273,3 +273,7 @@ h1 {
   padding-left: 0 !important;
   padding-right: 0 !important;
 }
+.rank{
+  font-size: 24px !important;
+  margin: 0.2em 0;
+}
