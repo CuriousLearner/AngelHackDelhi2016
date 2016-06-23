@@ -27,7 +27,7 @@ def getInitialUserData(request):
             follower_count = json_data['followers_count']
             location = json_data['location']
             profile_image_url = json_data['profile_image_url']
-            username = json_data['screen_name']
+            username = json_data['screen_name'].lower()
             try:
                 TwitterUser.objects.create(twitter_id=twitter_id, follower_count=follower_count,
                                            twitter_username=username, profile_image=profile_image_url, location=location)
@@ -94,6 +94,7 @@ def social_impact_formula(retweet, favorites, tweets, followers):
 
 
 def calculate_for_single_user(request, username):
+    username = username.lower()
     try:
         timeline = api.user_timeline(username)
     except Exception, e:  # API call failed
